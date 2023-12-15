@@ -45,6 +45,27 @@ form.addEventListener('submit', (evento) => {
    //marcar desmarcar checkbox
    checkbox.addEventListener('change', (evento) => {
       const endTask = evento.target.parentElement;
+      const strikeTask = endTask.querySelector('span');
+      const doneTask = evento.target.checked;
+
+      if(doneTask) {
+         strikeTask.style.textDecoration = 'line-through';
+      } else {
+         strikeTask.style.textDecoration = 'none';
+      }
+
+      tasks = tasks.map(t => {
+         if(t.title === strikeTask.textContent) {
+            return {
+               title: t.title,
+               done: !t.done
+            };
+         }
+
+         return t;
+      });
+
+      console.log(tasks);
    });
 
    //remove elementos html e do array
@@ -55,7 +76,6 @@ form.addEventListener('submit', (evento) => {
       tasks = tasks.filter(t => t.title !== titleRemove);
 
       list.removeChild(removeTask);
-      console.log(tasks);
    });
 
    //renderiza elementos html
