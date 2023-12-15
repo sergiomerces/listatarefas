@@ -64,8 +64,6 @@ form.addEventListener('submit', (evento) => {
 
          return t;
       });
-
-      console.log(tasks);
    });
 
    //remove elementos html e do array
