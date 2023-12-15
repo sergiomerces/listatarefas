@@ -26,17 +26,39 @@ form.addEventListener('submit', (evento) => {
    }
    
    //adicionar tarefas no HTML
-   tasks.push(taskTitle);
+   tasks.push({
+      title: taskTitle,
+      done: false
+   });
 
+   //criar elementos html
    const li = document.createElement('li');
    const checkbox = document.createElement('input');
    const span = document.createElement('span');
    const remover = document.createElement('button');
 
+   //tributos dos elementos html
    checkbox.setAttribute('type', 'checkbox');
    span.textContent = taskTitle;
    remover.textContent = 'Remover';
 
+   //marcar desmarcar checkbox
+   checkbox.addEventListener('change', (evento) => {
+      const endTask = evento.target.parentElement;
+   });
+
+   //remove elementos html e do array
+   remover.addEventListener('click', (evento) => {
+      const removeTask = evento.target.parentElement;
+      const titleRemove = removeTask.querySelector('span').textContent;
+
+      tasks = tasks.filter(t => t.title !== titleRemove);
+
+      list.removeChild(removeTask);
+      console.log(tasks);
+   });
+
+   //renderiza elementos html
    li.appendChild(checkbox);
    li.appendChild(span);
    li.appendChild(remover);
@@ -44,4 +66,5 @@ form.addEventListener('submit', (evento) => {
    list.appendChild(li);
 
    input.value = "";
+
 });
