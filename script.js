@@ -12,42 +12,48 @@ const list = document.querySelector('#todo-list');
 //array com todas tarefas
 let tasks = []; 
 
-function renderTaskOnHTML(taskTitle) {
-      //criar elementos html
-      const li = document.createElement('li');
-      const checkbox = document.createElement('input');
-      const span = document.createElement('span');
-      const remover = document.createElement('button');
+function renderTaskOnHTML(taskTitle, done = false) {
+
+   //criar elementos html
+   const li = document.createElement('li');
+   const checkbox = document.createElement('input');
+   const span = document.createElement('span');
+   const remover = document.createElement('button');
+
+   //atributos dos elementos html
+   checkbox.setAttribute('type', 'checkbox');
+   checkbox.checked = done;
+   span.textContent = taskTitle;
+   remover.textContent = 'Remover';
+
+   if(done) {
+      span.style.textDecoration = 'line-through';
+   }
+
+   //marcar desmarcar checkbox
+   checkbox.addEventListener('change', (evento) => {
+      const endTask = evento.target.parentElement;
+      const strikeTask = endTask.querySelector('span');
+      const doneTask = evento.target.checked;
    
-      //tributos dos elementos html
-      checkbox.setAttribute('type', 'checkbox');
-      span.textContent = taskTitle;
-      remover.textContent = 'Remover';
-   
-      //marcar desmarcar checkbox
-      checkbox.addEventListener('change', (evento) => {
-         const endTask = evento.target.parentElement;
-         const strikeTask = endTask.querySelector('span');
-         const doneTask = evento.target.checked;
-   
-         if(doneTask) {
-            strikeTask.style.textDecoration = 'line-through';
-         } else {
-            strikeTask.style.textDecoration = 'none';
+      if(doneTask) {
+         strikeTask.style.textDecoration = 'line-through';
+      } else {
+         strikeTask.style.textDecoration = 'none';
+      }
+
+      tasks = tasks.map(t => {
+         if(t.title === strikeTask.textContent) {
+            return {
+               title: t.title,
+               done: !t.done
+            };
          }
+
+         return t;
+      });
    
-         tasks = tasks.map(t => {
-            if(t.title === strikeTask.textContent) {
-               return {
-                  title: t.title,
-                  done: !t.done
-               };
-            }
-   
-            return t;
-         });
-   
-         localStorage.setItem('tasks', JSON.stringify(tasks));
+      localStorage.setItem('tasks', JSON.stringify(tasks));
       });
    
       //remove elementos html e do array
@@ -62,12 +68,24 @@ function renderTaskOnHTML(taskTitle) {
          localStorage.setItem('tasks', JSON.stringify(tasks));
       });
    
-      //renderiza elementos html
-      li.appendChild(checkbox);
-      li.appendChild(span);
-      li.appendChild(remover);
-   
-      list.appendChild(li);
+   //renderiza elementos html
+   li.appendChild(checkbox);
+   li.appendChild(span);
+   li.appendChild(remover);
+
+   list.appendChild(li);
+}
+
+window.onload = () => {
+   const tasksOnLocalStorage = localStorage.getItem('tasks');
+   console.log(tasksOnLocalStorage);
+
+   if(!tasksOnLocalStorage) return
+   tasks = JSON.parse(tasksOnLocalStorage);
+
+   tasks.forEach(element => {
+      renderTaskOnHTML(element.title, element.done);b
+   });
 }
 
 form.addEventListener('submit', (evento) => {
